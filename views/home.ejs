@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include("./partials/header") %>
+
+<div class="container d-flex flex-column align-items-center justify-content-center" style="min-height: 80vh;">
+    <% if (!authenticated) { %>
+        <h1 class="mb-4">Welcome</h1>
+        <p class="text-muted mb-4">Please sign up or log in to continue.</p>
+        <div class="d-flex gap-3">
+            <a href="/signup" class="btn btn-success btn-lg">Sign Up</a>
+            <a href="/login" class="btn btn-primary btn-lg">Log In</a>
+        </div>
+    <% } else { %>
+        <h1 class="mb-4">Hello, <%= username %>!</h1>
+        <div class="d-flex gap-3">
+            <a href="/members" class="btn btn-success btn-lg">Members Area</a>
+            <a href="/logout" class="btn btn-primary btn-lg">Log Out</a>
+        </div>
+    <% } %>
+</div>
+
+<%- include("./partials/footer") %>
+</body>
+</html>
+
+
+

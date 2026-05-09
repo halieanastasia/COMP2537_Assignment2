@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include("./partials/header") %>
+
+<div class="container mt-4">
+    <h1 class="mb-2">Members Only</h1>
+    <p class="text-muted mb-4">Hello, <%= username %>!</p>
+
+    <div class="row">
+        <div class="col-12 col-md-4 mb-3">
+            <img src="/1.png" class="img-fluid rounded shadow-sm" alt="Image 1">
+        </div>
+        <div class="col-12 col-md-4 mb-3">
+            <img src="/2.png" class="img-fluid rounded shadow-sm" alt="Image 2">
+        </div>
+        <div class="col-12 col-md-4 mb-3">
+            <img src="/3.png" class="img-fluid rounded shadow-sm" alt="Image 3">
+        </div>
+    </div>
+
+    <a href="/logout" class="btn btn-primary mt-2">Log Out</a>
+</div>
+
+<%- include("./partials/footer") %>
+</body>
+</html>
