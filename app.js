@@ -121,14 +121,14 @@ app.post("/signup", async (req, res) => {
     username: username,
     email: email,
     password: hashedPassword,
-    admin: true,
+    user_type: "admin",
   });
 
   req.session.authenticated = true;
   req.session.username = username;
   req.session.email = email;
   req.session.cookie.maxAge = oneHour;
-  req.session.admin = true;
+  req.session.user_type = "admin";
 
   req.session.save((err) => {
     if (err) console.error("Session save error:", err);
@@ -161,7 +161,7 @@ app.post("/login", async (req, res) => {
 
   const match = await userCollection
     .find({ email: email })
-    .project({ email: 1, username: 1, password: 1, _id: 1, admin: 1 })
+    .project({ email: 1, username: 1, password: 1, _id: 1, user_type: 1 })
     .toArray();
 
   if (match.length != 1) {
@@ -174,7 +174,7 @@ app.post("/login", async (req, res) => {
     req.session.email = email;
     req.session.username = match[0].username;
     req.session.cookie.maxAge = oneHour;
-    req.session.admin = match[0].admin;
+    req.session.user_type = match[0].user_type;
     req.session.save((err) => {
       if (err) {
         console.error("Session save error:", err);
@@ -215,7 +215,7 @@ app.get("/admin", async (req, res) => {
 
   // const userCollection = database.db(mongodb_users_database).collection("users");
   
-  if (!req.session.admin) {
+  if (req.session.user_type !== "admin") {
     res.status(403);
     res.render("error", {titleName: "Admin Error", errorMessage: "You are not authorized to view this page", redirectLink: "/", redirectMessage: "Return to Home Page"} );
     return;
@@ -230,7 +230,7 @@ app.get("/admin", async (req, res) => {
 
 
 app.post("/promote", async(req, res) => {
-  if (!req.session.authenticated || !req.session.admin){
+  if (!req.session.authenticated || req.session.user_type !== "admin"){
     res.render("error", {titleName: "Admin Error", errorMessage: "You are not authorized to view this page", redirectLink: "/", redirectMessage: "Return to Home Page"} );
     return;
   }
@@ -238,20 +238,20 @@ app.post("/promote", async(req, res) => {
   console.log("User: ", req.body.email);
   await userCollection.updateOne(
     { email: req.body.email},
-    {$set: {admin: true}}
+    {$set: {user_type: "admin"}}
   );
   res.redirect("/admin");
 });
 
 app.post("/demote", async(req, res) => {
-  if (!req.session.authenticated || !req.session.admin){
+  if (!req.session.authenticated || req.session.user_type !== "admin"){
     res.render("error", {titleName: "Admin Error", errorMessage: "You are not authorized to view this page", redirectLink: "/", redirectMessage: "Return to Home Page"} );
     return;
   }
 
   await userCollection.updateOne(
     { email: req.body.email},
-    {$set: {admin: false}}
+    {$set: {user_type: "user"}}
   );
 
   if (req.body.email === req.session.email){
