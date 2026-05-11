@@ -258,10 +258,9 @@ app.post("/demote", async(req, res) => {
   );
 
   if (req.body.email === req.session.email){
-    req.session.admin = false;
+    req.session.user_type = "user";
     req.session.save((err) => {
       if (err) console.error("Session save error:", err);
-      res.redirect("/admin");
     });
   }
   
