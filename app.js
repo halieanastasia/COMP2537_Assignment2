@@ -60,6 +60,7 @@ app.use(
   }),
 );
 
+// Authentication middleware
 app.use((req, res, next) => {
   res.locals.authenticated = req.session.authenticated || false;
   next();
@@ -73,7 +74,7 @@ const Joi = require("joi");
 // Home Page
 app.get("/", (req, res) => {
   res.render("home", {
-    authenticated: req.session.authenticated,
+    authenticated: req.session.authenticated, // authentication
     username: req.session.username,
     titleName: "Home Page",
   });
@@ -207,14 +208,13 @@ app.get("/members", (req, res) => {
 });
 
 app.get("/admin", async (req, res) => {
-  //TODO replace face with req.session.authorized?
+  // Authentication redirect
   if (!req.session.authenticated) {
   res.redirect("/login");
   return;
   }
 
-  // const userCollection = database.db(mongodb_users_database).collection("users");
-  
+  // Authorization
   if (req.session.user_type !== "admin") {
     res.status(403);
     res.render("error", {titleName: "Admin Error", errorMessage: "You are not authorized to view this page", redirectLink: "/", redirectMessage: "Return to Home Page"} );
@@ -230,6 +230,7 @@ app.get("/admin", async (req, res) => {
 
 
 app.post("/promote", async(req, res) => {
+  // Authorization and authentication
   if (!req.session.authenticated || req.session.user_type !== "admin"){
     res.render("error", {titleName: "Admin Error", errorMessage: "You are not authorized to view this page", redirectLink: "/", redirectMessage: "Return to Home Page"} );
     return;
@@ -243,7 +244,9 @@ app.post("/promote", async(req, res) => {
   res.redirect("/admin");
 });
 
+
 app.post("/demote", async(req, res) => {
+  // Authorization and authentication
   if (!req.session.authenticated || req.session.user_type !== "admin"){
     res.render("error", {titleName: "Admin Error", errorMessage: "You are not authorized to view this page", redirectLink: "/", redirectMessage: "Return to Home Page"} );
     return;
