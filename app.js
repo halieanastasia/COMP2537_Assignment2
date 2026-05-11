@@ -232,6 +232,7 @@ app.get("/admin", async (req, res) => {
 app.post("/promote", async(req, res) => {
   if (!req.session.authenticated || !req.session.admin){
     res.render("error", {titleName: "Admin Error", errorMessage: "You are not authorized to view this page", redirectLink: "/", redirectMessage: "Return to Home Page"} );
+    return;
   }
 
   console.log("User: ", req.body.email);
@@ -245,6 +246,7 @@ app.post("/promote", async(req, res) => {
 app.post("/demote", async(req, res) => {
   if (!req.session.authenticated || !req.session.admin){
     res.render("error", {titleName: "Admin Error", errorMessage: "You are not authorized to view this page", redirectLink: "/", redirectMessage: "Return to Home Page"} );
+    return;
   }
 
   await userCollection.updateOne(
@@ -254,6 +256,10 @@ app.post("/demote", async(req, res) => {
 
   if (req.body.email === req.session.email){
     req.session.admin = false;
+    req.session.save((err) => {
+      if (err) console.error("Session save error:", err);
+      res.redirect("/admin");
+    });
   }
   
   res.redirect("/admin");

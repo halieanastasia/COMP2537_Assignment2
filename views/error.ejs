@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-<%- include("./partials/header") %>
-<h1>Error</h1>
-
-<p><%= errorMessage %></p>
-<a href="<%= redirectLink %>"><%= redirectMessage %></a>
-
-<%- include("./partials/footer") %>
+<%- include("./templates/header") %>
+<div class="container d-flex flex-column align-items-center justify-content-center" style="min-height: 80vh;">
+    <div class="card p-4 shadow-sm text-center" style="max-width: 400px; width: 100%;">
+        <h1 class="text-danger mb-3">Error</h1>
+        <p class="text-muted"><%= errorMessage %></p>
+        <a href="<%= redirectLink %>" class="btn btn-success mt-2"><%= redirectMessage %></a>
+    </div>
+</div>
+<%- include("./templates/footer") %>
 </body>
 </html>
 

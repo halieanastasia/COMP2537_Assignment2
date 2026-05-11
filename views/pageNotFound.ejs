@@ -1,8 +1,12 @@
-<!DOCTYPE html>
 <html lang="en">
-<%- include("./partials/header") %>
-    <h1>"Page not found - 404"</h1>
-<%- include("./partials/footer") %>
+<%- include("./templates/header") %>
+<div class="container d-flex flex-column align-items-center justify-content-center text-center" style="min-height: 80vh;">
+    <h1 class="display-1 fw-bold text-success">404</h1>
+    <h2 class="mb-3">Page Not Found</h2>
+    <p class="text-muted mb-4">Oops! The page you're looking for doesn't exist.</p>
+    <a href="/" class="btn btn-success btn-lg">Go Home</a>
+</div>
+<%- include("./templates/footer") %>
 </body>
 </html>
 
